@@ -1,0 +1,164 @@
+{% extends 'navigation.html' %}
+{% block body %}
+<style>
+* {
+  box-sizing: border-box;
+}
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+input[type=submit] {
+  background-color: #20305E;
+  color: white;
+  width:20%;
+  height:27px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: center;
+  text-align:center;
+  margin-top:2%;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.container{
+   width:50%;
+   height:150px
+  border-radius: 5px;
+  background-color: #99DBF9;
+  padding: 30px;
+}
+.container2{
+   width:50%;
+   height:50px;
+  border-radius: 5px;
+  background-color: #20305E;
+  color:white;
+  padding: 0.05px;
+  margin:10px;
+  float:center;
+}
+
+.col-25 {
+  float: left;
+  width: 25%;
+  margin-top: 1px;
+}
+
+.col-75 {
+  float: left;
+  width: 75%;
+  margin-top: 1px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .col-25, .col-75, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+    float:center;
+  }
+}
+</style>
+</head>
+<body>
+
+<p align="center" style="margin-top:1%;font-size:18px">"All Favourate Car Ad"</p>
+<hr>
+    <div class="row" style="margin:5%">
+        {% for r in obj %}
+        {% with i=r.car_detail%}
+        <div class="col-sm-6">
+            <div class="jumbotron" style="width:100%;border-radius:4%;padding:4%">
+            <p style="color:red">{{i.title}}<hr></p>
+                <a href="{% url 'detail' i.id %}" ><img src="{{i.img.url}}" style="border-radius:8%;width:300px;height:300px;"><hr></a>
+            <h4 style="color:black">Price : {{i.price}} Rs.</h4>
+            <h4 style="color:black">Contact : {{i.register.mobile}}</h4>
+            <h4 style="color:black">Local Address : {{i.local_add}}</h4>
+                <h4 style="color:black">Brand : {{i.brand}}   &nbsp;&nbsp;&nbsp;&nbsp;Model : {{i.model}} </h4>
+                <h4 style="color:black">Fuel : {{i.fuel}}   &nbsp;&nbsp;&nbsp;&nbsp;Year : {{i.year}} </h4>
+                <h4 style="color:black">KmDriven : {{i.kmdriven}}   &nbsp;&nbsp;&nbsp;&nbsp;No. of Owner : {{i.noofowner}} </h4>
+                <hr>
+                <p>Additional Information :</p>
+                <h4 style="color:Black">{{i.desc}}</h4>{{i.state.state}}
+                <a href="{% url 'owner' i.id %}"><img src="{{i.register.image.url}}" style="border-radius:50%;width:30px;height:30px"> Owner Detail</a><br>
+                {% if i.is_favourate %}
+                  <span title="Added to Favourate" style="display:inline-block;float:right; margin-top:-31px; font-size:36px;color:red;" class="addfav{{i.id}} glyphicon glyphicon-heart" onclick="addtoFavourate({{i.id}},this)"></span>
+                {% else %}
+                  <span title="Add to Favourate" style="display:inline-block;float:right; margin-top:-31px; font-size:36px;" class="addfav{{i.id}} glyphicon glyphicon-heart-empty" onclick="addtoFavourate({{i.id}},this)"></span>
+               
+                {% endif %}
+            </div>
+            </div>
+            {% endwith %}
+        {% endfor %}
+    </div>
+
+    <script>
+      const addtoFavourate = (pk,e) => {
+        let classname = '.addfav'+pk
+        let addFav = document.querySelector(classname);
+        console.log(addFav);
+        const formData = new FormData();
+        formData.append('pk', pk);
+        console.log(formData);
+        fetch('{% url "add_to_favourate" %}', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+          if(data.is_fav){
+            addFav.classList.remove('glyphicon-heart-empty');
+            addFav.classList.add('glyphicon-heart');
+            addFav.style.color = 'red';
+            Toastify({
+              text: "Added to Favourate",
+              duration: 3000,
+              avatar: 'https://www.freeiconspng.com/uploads/green-yes-check-mark-png-17.png',
+              gravity: "bottom", // `top` or `bottom`
+              position: "center", // `left`, `center` or `right`
+              }).showToast();
+          }else{
+            addFav.classList.remove('glyphicon-heart');
+            addFav.classList.add('glyphicon-heart-empty');
+            addFav.style.color = 'black';
+            addFav.parentNode.parentNode.removeChild( addFav.parentNode );
+            Toastify({
+              text: "Remove from Favourate",
+              duration: 3000,
+              gravity: "bottom", // `top` or `bottom`
+              position: "center", // `left`, `center` or `right`
+              }).showToast();
+          }
+          
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      }
+    </script>
+
+{% endblock %}

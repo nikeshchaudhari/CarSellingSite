@@ -1,0 +1,52 @@
+{% extends 'navigation.html' %}
+{% block body %}
+<style>
+    input[type=text][type=password]{
+    border-radius:8px;
+    width:600px;
+    height:16px;
+    }
+    #bg{
+    background-size: 1800px 900px;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+}
+</style>
+
+<center><div style="color:Black;border:1px solid white;border-radius:8px;background-color:#99DBF9;padding:50px">
+
+        <h3><strong>Register User Account</strong></h3><hr>
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        First Name:<br><input type="text" placeholder="Enter first name" name="fname" style="border-radius:8px;width:600px;height:35px;"><br><br>
+        Last Name:<br><input type="text" placeholder="Enter last name" name="lname" style="border-radius:8px;width:600px;height:35px;"><br><br>
+User Name:<br><input type="text" placeholder="Enter user name" name="uname" style="border-radius:8px;width:600px;height:35px;"><br><br>
+        Password:<br><input type="password" placeholder="Enter password" name="pwd" style="border-radius:8px;width:600px;height:35px;"><br><br>
+        Gender:<br><div style="border-radius:8px;width:600px;height:35px;"> Male <input type="radio" value="Male" name="male"> Female <input type="radio" value="Female" name="male"><br><br></div>
+Email:<br><input type="email" placeholder="Enter email" name="email" style="border-radius:8px;width:600px;height:35px;"><br><br>
+        Mobile:<br><input type="text" placeholder="Enter mobile number" name="mobile" style="border-radius:8px;width:600px;height:35px;"><br><br>
+Date of Birth:<br><input type="date" placeholder="Enter your Date of Birth" name="birth" style="border-radius:8px;width:600px;height:35px;"><br><br>
+
+        Full Address:<br><textarea placeholder="Enter Address" name="add" style="border-radius:8px;width:600px;"></textarea><br><br>
+
+
+        Profile Image:<br><input type="file" value="Choose File" name="img" style="border:1px solid grey;border-radius:8px;width:600px;height:35px;"><br><br>
+        <input type="submit" value="Register" style="color:white;border-radius:8px;width:100px;height:35px;background-color:#333;border:1px solid black">
+    </form>
+
+    </div></center>
+
+
+{% ifequal error "no" %}
+<script>
+    alert('Signup Successfully');
+    window.location=('{% url 'signin' %}');
+</script>
+{% endifequal %}
+{% ifequal error "yes" %}
+<script>
+    alert('Something went wrong,Try Again...');
+</script>
+{% endifequal %}
+{% endblock %}

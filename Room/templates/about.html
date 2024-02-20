@@ -1,0 +1,22 @@
+{% extends 'navigation.html' %}
+{% block body %}
+{% load static %}
+<div class="jumbotron">
+<div><h2 style="color:blue">&nbsp;&nbsp;&nbsp;&nbsp;About Us</h2></div><hr>
+<div class="row" style="margin-left:20px">
+		<div class="col-md-8">
+<p><br>Hello Friends , This is simple old car selling website project developed by
+    ABC , XYZ and PQR using HTML , CSS , Javascript as frontend and Python language
+    and Sqlite database in backend. </p></div>
+
+    <div class="col-md-4" >
+    <img style="margin-right:18px;width:80%" src="{% static 'images/home10.jpg' %}"/>
+
+    </div>
+</div>
+    <br><br>
+     <img src = "{% static 'images/Sellcar1.jpg' %}" width="100%" class="img-responsive">
+</div>
+
+
+{% endblock %}
